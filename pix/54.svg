@@ -1,0 +1,9 @@
+#!/bin/bash
+c=0;
+for i in * 
+do 
+	echo $i
+        mv $i "$c.svg"
+        c=`expr $c + 1`;
+	echo $c
+done

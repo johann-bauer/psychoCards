@@ -7,6 +7,7 @@
 TARGET = psychoCards
 TEMPLATE = app
 
+QT += svg
 
 SOURCES += main.cpp\
         widget.cpp
