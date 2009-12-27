@@ -4,9 +4,15 @@
 #include <QWidget>
 #include <QMap>
 #include <QUrl>
+#include <QTimeLine>
 
 class QGraphicsSvgItem;
+class QGraphicsRectItem;
+
 class QGraphicsScene;
+class QTimeLine;
+
+class Card;
 
 namespace Ui {
     class Widget;
@@ -18,6 +24,10 @@ public:
     Widget(QWidget *parent = 0);
     ~Widget();
 
+ public slots:
+    void moveByX( int );
+    void moveByY( int );
+
 protected:
     void changeEvent(QEvent *e);
     void resizeEvent ( QResizeEvent * event );
@@ -27,10 +37,12 @@ private:
     Ui::Widget *ui;
 
     QMap<int,QUrl> m_cards;
-    QGraphicsSvgItem *card;
+    Card *card;
     QGraphicsScene *scene;
+    QGraphicsRectItem *rectItem;
 
     void mixCards( void );
+    void createCards( void );
 };
 
 #endif // WIDGET_H

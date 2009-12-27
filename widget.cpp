@@ -1,25 +1,33 @@
 #include "widget.h"
+#include "card.h"
 #include "ui_widget.h"
 
 #include <QDebug>
+#include <QList>
 
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsSvgItem>
+#include <QSvgRenderer>
+#include <QGraphicsRectItem>
 #include <QKeyEvent>
+#include <QTimeLine>
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Widget)
 {
     ui->setupUi(this);
-    scene = new QGraphicsScene;
+    scene = new QGraphicsScene(0,0,500,500);
+//    rectItem = scene->addRect(scene->sceneRect());
     ui->graphicsView->setScene( scene );
+    ui->graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
 
 //    card = new QGraphicsSvgItem( "./pix/1.svg");
 //    scene->addItem( card );
 
-    this->mixCards();
+    this->createCards();
+
 }
 
 Widget::~Widget()
@@ -40,28 +48,68 @@ void Widget::changeEvent(QEvent *e)
 }
 
 void Widget::mixCards( void ) {
-   int i, width;
    int space = 10;
-   QGraphicsSvgItem *tmp;
+
+
+}
+
+void Widget::createCards( void ) {
+   int i, width, dx,dy;
+   int space = 10;
+
+   QString filename = QString("./pix/%1.svg").arg(i);
+   card = new Card( filename );
+   scene->addItem( card );
+//   card->setFlags( QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable );
+   qDebug() << "Position befor move: " << card->pos();
+   card->moveAnimated( 100, 100 );
+//   card->moveBy( 100, 100 );
+   qDebug() << "Position after move: " << card->pos();
+
+   Card *tmp;
    for( i = 0; i < 21; i++ ) {
       QString filename = QString("./pix/%1.svg").arg(i);
-      qDebug() << filename;
-      tmp = new QGraphicsSvgItem( filename );
+      tmp = new Card( filename );
+      card = tmp;
       scene->addItem(tmp);
       width = tmp->boundingRect().width();
-      tmp->moveBy( ( i % 3 ) * ( width + space ) , i/3 * 80);
+      tmp->moveAnimated( ( i % 3 ) * ( width + space ) , i/3 * 80);
+//      tmp->moveBy( ( i % 3 ) * ( width + space ) , i/3 * 80);
       tmp->setData( 0 , i );
       tmp->setFlags( QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable );
       tmp->setZValue( i );
 
    }
+//    ui->graphicsView->fitInView( rectItem );
+
 }
 
-void Widget::resizeEvent ( QResizeEvent * event ) {
+void Widget::resizeEvent ( QResizeEvent * /*event*/ ) {
 //   qDebug() << "resize";
-//   ui->graphicsView->fitInView( this->card, Qt::KeepAspectRatio);
+//   ui->graphicsView->fitInView( this->scene->sceneRect(), Qt::KeepAspectRatio);
 }
 
 void Widget::keyPressEvent ( QKeyEvent * event ) {
-   mixCards();
+   qDebug() << "key pressed";
+   //   mixCards();
+   //   card->moveAnimated(200, 200);
+   if( event->key() == Qt::Key_Up )
+      qDebug() << "yeah";
+   switch ( event->key() ) {
+   case Qt::Key_W: card->moveAnimated( card->x() , card->y() - 100); break;
+   case Qt::Key_S: card->moveAnimated( card->x(), card->y() + 100); break;
+   case Qt::Key_A: card->moveAnimated( card->x() - 100, card->y() ); break;
+   case Qt::Key_D: card->moveAnimated( card->x() + 100, card->y() ); break;
+   default: mixCards();
+   }
+}
+
+void Widget::moveByX( int x) {
+   card->setPos( x, card->y() );;
+   qDebug() << x;
+}
+
+
+void Widget::moveByY( int y ) {
+   card->setPos( card->x(), y);
 }
