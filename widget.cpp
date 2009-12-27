@@ -57,15 +57,6 @@ void Widget::createCards( void ) {
    int i, width, dx,dy;
    int space = 10;
 
-   QString filename = QString("./pix/%1.svg").arg(i);
-   card = new Card( filename );
-   scene->addItem( card );
-//   card->setFlags( QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable );
-   qDebug() << "Position befor move: " << card->pos();
-   card->moveAnimated( 100, 100 );
-//   card->moveBy( 100, 100 );
-   qDebug() << "Position after move: " << card->pos();
-
    Card *tmp;
    for( i = 0; i < 21; i++ ) {
       QString filename = QString("./pix/%1.svg").arg(i);
