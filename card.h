@@ -17,13 +17,13 @@ signals:
     void moveItemX( int );
     void moveItemY( int );
 
-//protected:
-//    virtual QVariant itemChange ( GraphicsItemChange change, const QVariant & value );
+protected:
+    virtual void hoverEnterEvent ( QGraphicsSceneHoverEvent * event );
 
 private:
     QTimeLine *timeLineX;
     QTimeLine *timeLineY;
-    bool lock;
+
 };
 
 #endif // CARD_H

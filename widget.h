@@ -5,6 +5,7 @@
 #include <QMap>
 #include <QUrl>
 #include <QTimeLine>
+#include <QStack>
 
 class QGraphicsSvgItem;
 class QGraphicsRectItem;
@@ -36,13 +37,15 @@ protected:
 private:
     Ui::Widget *ui;
 
-    QMap<int,QUrl> m_cards;
+    QMap<int,Card*> m_cards;
     Card *card;
     QGraphicsScene *scene;
     QGraphicsRectItem *rectItem;
+    QStack<int> m_stack;
 
     void mixCards( void );
     void createCards( void );
+    void giveCards( int row = 0 );
 };
 
 #endif // WIDGET_H

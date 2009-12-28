@@ -19,15 +19,11 @@ Widget::Widget(QWidget *parent) :
 {
     ui->setupUi(this);
     scene = new QGraphicsScene(0,0,500,500);
-//    rectItem = scene->addRect(scene->sceneRect());
     ui->graphicsView->setScene( scene );
     ui->graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
 
-//    card = new QGraphicsSvgItem( "./pix/1.svg");
-//    scene->addItem( card );
-
     this->createCards();
-
+    this->giveCards();
 }
 
 Widget::~Widget()
@@ -48,30 +44,24 @@ void Widget::changeEvent(QEvent *e)
 }
 
 void Widget::mixCards( void ) {
-   int space = 10;
-
 
 }
 
 void Widget::createCards( void ) {
-   int i, width, dx,dy;
    int space = 10;
+   int i, width;
 
    Card *tmp;
    for( i = 0; i < 21; i++ ) {
       QString filename = QString("./pix/%1.svg").arg(i);
       tmp = new Card( filename );
-      card = tmp;
+      m_cards.insert(i,tmp);
       scene->addItem(tmp);
-      width = tmp->boundingRect().width();
-      tmp->moveAnimated( ( i % 3 ) * ( width + space ) , i/3 * 80);
-//      tmp->moveBy( ( i % 3 ) * ( width + space ) , i/3 * 80);
-      tmp->setData( 0 , i );
-      tmp->setFlags( QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable );
-      tmp->setZValue( i );
-
+      m_stack.push(i); //if stack is full. all cards are on the hand
    }
-//    ui->graphicsView->fitInView( rectItem );
+   qDebug() << "Nummer of cards: " << m_cards.count();
+
+
 
 }
 
@@ -82,17 +72,16 @@ void Widget::resizeEvent ( QResizeEvent * /*event*/ ) {
 
 void Widget::keyPressEvent ( QKeyEvent * event ) {
    qDebug() << "key pressed";
-   //   mixCards();
-   //   card->moveAnimated(200, 200);
-   if( event->key() == Qt::Key_Up )
-      qDebug() << "yeah";
+   mixCards();
+
+   /*
    switch ( event->key() ) {
    case Qt::Key_W: card->moveAnimated( card->x() , card->y() - 100); break;
    case Qt::Key_S: card->moveAnimated( card->x(), card->y() + 100); break;
    case Qt::Key_A: card->moveAnimated( card->x() - 100, card->y() ); break;
    case Qt::Key_D: card->moveAnimated( card->x() + 100, card->y() ); break;
    default: mixCards();
-   }
+   }*/
 }
 
 void Widget::moveByX( int x) {
@@ -104,3 +93,26 @@ void Widget::moveByX( int x) {
 void Widget::moveByY( int y ) {
    card->setPos( card->x(), y);
 }
+
+void Widget::giveCards( int row ) {
+   int width,i;
+   int space = 10;
+   Card *tmp;
+   QMapIterator<int, Card*> iterator(m_cards);
+   if( m_stack.count() != m_cards.count() )
+      qDebug() << "FATAL: Stack aint got the same card count";
+
+   while( !m_stack.empty() ) {
+      i = m_stack.pop();
+      tmp = m_cards.value(i);
+      width = tmp->boundingRect().width();
+      tmp->moveAnimated( ( i % 3 ) * ( width + space ) ,
+                           i / 3 * 80);
+      tmp->setFlags( QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable );
+      tmp->setZValue( i );
+      tmp->setData( 0 , i );
+   }
+
+   qDebug() << "end of giveCards. stackCount: " << m_stack.count();
+}
+
