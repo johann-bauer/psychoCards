@@ -42,10 +42,15 @@ private:
     QGraphicsScene *scene;
     QGraphicsRectItem *rectItem;
     QStack<int> m_stack;
+    int run;
 
-    void mixCards( void );
+    void createHelp( void );
+    void mixCards( int col = 0 );
     void createCards( void );
     void giveCards( int row = 0 );
+    void endOfGame( void );
+    void restartGame( void );
+    Card * findCardOnPos( int pos );
 };
 
 #endif // WIDGET_H
