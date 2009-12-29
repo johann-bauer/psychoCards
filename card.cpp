@@ -49,7 +49,7 @@ void Card::moveAnimated( int x, int y) {
 }
 
 void Card::scaleAnimated( int x, int y) {
-   timeLineS->setFrameRange( SCALE , x*100 );
+   timeLineS->setFrameRange( SCALE*100 , x*100 );
    timeLineS->start();
 }
 

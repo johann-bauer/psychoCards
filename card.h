@@ -1,7 +1,7 @@
 #ifndef CARD_H
 #define CARD_H
 
-#define DURATION 2000
+#define DURATION 1000
 #define SCALE 0.7
 
 #include <QGraphicsSvgItem>
