@@ -13,17 +13,14 @@ Q_OBJECT
 public:
     explicit Card(QString filename, QGraphicsItem *parent = 0);
     void moveAnimated( int x, int y);
-    void scaleAnimated( int x, int y);
+    void scaleAnimated( int x );
 
 signals:
 
  public slots:
     void moveItemX( int );
     void moveItemY( int );
-    void scaleItem( int x );
-
-protected:
-    virtual void hoverEnterEvent ( QGraphicsSceneHoverEvent * event );
+    void scaleItem( int );
 
 private:
     QTimeLine *timeLineX;

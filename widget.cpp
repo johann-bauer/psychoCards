@@ -94,7 +94,8 @@ void Widget::mixCards( int col) {
       break;
 
    }
-   qDebug() << "STACK: " << m_stack;
+
+//   qDebug() << "STACK: " << m_stack;
 
    /*foreach( Card *tmpCard, m_cards ) {
       tmpCard->moveAnimated(-500,500);
@@ -118,10 +119,6 @@ void Widget::createCards( void ) {
       m_stack.push(i); //if stack is full. all cards are on the hand
                          // the nummer identify the card.
    }
-   qDebug() << "Nummer of cards: " << m_cards.count();
-
-
-
 }
 
 void Widget::resizeEvent ( QResizeEvent * /*event*/ ) {
@@ -131,7 +128,6 @@ void Widget::resizeEvent ( QResizeEvent * /*event*/ ) {
 
 void Widget::keyPressEvent ( QKeyEvent * event ) {
    int col = event->key() - 48;
-   qDebug() << "key pressed" << event->key()-48;
    if( col >= 1 && col <=3)
       mixCards( col );
    else if(event->key() == Qt::Key_R )
@@ -140,7 +136,6 @@ void Widget::keyPressEvent ( QKeyEvent * event ) {
 
 void Widget::moveByX( int x) {
    card->setPos( x, card->y() );;
-   qDebug() << x;
 }
 
 
@@ -148,7 +143,7 @@ void Widget::moveByY( int y ) {
    card->setPos( card->x(), y);
 }
 
-void Widget::giveCards( int row ) {
+void Widget::giveCards( void ) {
    int width, cardNr;
    int space = 10;
    int i = 0;
@@ -181,20 +176,22 @@ void Widget::giveCards( int row ) {
 }
 
 Card * Widget::findCardOnPos( int pos ) {
+   Card *returnCard = NULL;
    foreach( Card *tmpCard, m_cards ) {
       if( tmpCard->data( OLDPOS ).toInt() == pos ) {
-//         qDebug() << "Card found at: " << pos;
-         return tmpCard;
+         returnCard = tmpCard;
       }
    }
-   qDebug () << "FATAL: Card not found. nr:" << pos ;
+   if( !returnCard )
+      qDebug () << "FATAL: Card not found. nr:" << pos ;
+   return returnCard;
 }
 
 void Widget::endOfGame( void ) {
    Card *yourCard = findCardOnPos(10);
    yourCard->setZValue(100);
 //   yourCard->scale(2,2);
-   yourCard->scaleAnimated(2,2);
+   yourCard->scaleAnimated( 2 );
 }
 
 void Widget::restartGame( void ) {
@@ -203,10 +200,10 @@ void Widget::restartGame( void ) {
       tmpCard->resetTransform();
       tmpCard->scale( SCALE, SCALE );
    }
-   mixCards(1);
+   mixCards(3);
 }
 
 void Widget::createHelp( void ) {
-   QGraphicsTextItem *helpText = scene->addText("Press 1, 2, 3, R: Restart");
-   helpText->moveBy(0,-20);
+   QGraphicsTextItem *helpText = scene->addText("Choose a card and tell me in which column it is. Press 1, 2, 3, R: Restart");
+   helpText->moveBy(0,-30);
 }

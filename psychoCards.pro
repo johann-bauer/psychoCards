@@ -10,3 +10,5 @@ SOURCES += main.cpp \
 HEADERS += widget.h \
     card.h
 FORMS += widget.ui
+
+CONFIG += silent

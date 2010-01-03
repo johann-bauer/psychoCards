@@ -47,7 +47,7 @@ private:
     void createHelp( void );
     void mixCards( int col = 0 );
     void createCards( void );
-    void giveCards( int row = 0 );
+    void giveCards( void );
     void endOfGame( void );
     void restartGame( void );
     Card * findCardOnPos( int pos );

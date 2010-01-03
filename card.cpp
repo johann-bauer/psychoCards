@@ -4,7 +4,6 @@
 Card::Card( QString filename, QGraphicsItem *parent) :
     QGraphicsSvgItem(filename, parent)
 {
-   this->setAcceptHoverEvents(true);
    timeLineX = new QTimeLine( DURATION, this );
    timeLineY = new QTimeLine( DURATION, this );
    timeLineS = new QTimeLine( DURATION, this );
@@ -48,14 +47,8 @@ void Card::moveAnimated( int x, int y) {
    timeLineY->start();
 }
 
-void Card::scaleAnimated( int x, int y) {
+void Card::scaleAnimated( int x ) {
    timeLineS->setFrameRange( SCALE*100 , x*100 );
    timeLineS->start();
 }
 
-void Card::hoverEnterEvent ( QGraphicsSceneHoverEvent * event ) {
-   int i = this->data(0).toInt();
-   int x = i % 3;
-   int y = i / 3;
-   qDebug() << "Card Position: " << x << "," << y;
-}
